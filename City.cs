@@ -11,17 +11,21 @@ namespace Systemy_rozmyte
         public string name { get; set; }
         public double airPollution { get; set; }
         public double insolation { get; set; }
-        
+
+        public double decision { get; set; }
+
         public List<double> results = new List<double>();
         public List<double> fuzzyRule1 = new List<double>();
         public List<double> fuzzyRule2 = new List<double>();
-        public List<double> resultOfRules = new List<double>();
-        
-        public void caculateResult() 
-        {
-            results.Add(product(fuzzyRule1[0], fuzzyRule2[0]));
-            results.Add(product(fuzzyRule1[1], fuzzyRule2[1]));
-            results.Add(product(fuzzyRule1[2], fuzzyRule2[2]));
+        private List<double> resultOfRules = new List<double>();
+
+        public void caculateResult()
+        {//np.: kazdy z kazdym
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    results.Add(product(fuzzyRule1[i], fuzzyRule2[j]));
+
+
         }
         public City(string name, double airPollution, double insolation)
         {
@@ -29,28 +33,36 @@ namespace Systemy_rozmyte
             this.airPollution = airPollution;
             this.insolation = insolation;
         }
-       double product(double a, double b)
+        double product(double a, double b)
         {
             return a * b;
         }
-        public double makeDecision()
+        public void makeDecision()
         {
+            //przesłanka odpowiedniej reguły - 9 kombinacji, a więc 9 różnych wynikow
             resultOfRules.Add(1);
-            resultOfRules.Add(2);
-            resultOfRules.Add(3);
+            resultOfRules.Add(0.8);
+            resultOfRules.Add(0.5);
+            resultOfRules.Add(1);
+            resultOfRules.Add(0.7);
+            resultOfRules.Add(0.2);
+            resultOfRules.Add(0.7);
+            resultOfRules.Add(0.3);
+            resultOfRules.Add(0.1);
             double decision = 0;
             double tmp = 0;
-            for (int i = 0; i < resultOfRules.Count; i++) 
+            for (int i = 0; i < resultOfRules.Count; i++)
             {
                 decision += results[i] * resultOfRules[i];
-             
+
             }
-            for(int i=0; i<results.Count; i++)
+            for (int i = 0; i < results.Count; i++)
             {
                 tmp += results[i];
+
             }
-            double result = decision / tmp;
-            return result;
+
+            this.decision = decision / tmp;
         }
     }
 }

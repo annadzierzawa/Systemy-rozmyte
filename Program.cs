@@ -28,10 +28,21 @@ namespace Systemy_rozmyte
                 city.fuzzyRule2.Add(triangle(0.1, 0.7, 0.9, city.insolation));
                 city.fuzzyRule2.Add(trapezoidal(0.7, 0.9, 1, 1, city.insolation));
                 city.caculateResult();
-               Console.WriteLine(city.makeDecision());
+                city.makeDecision();
+                Console.WriteLine(">>>" + city.name + "-- zanieczyszczenie=" +
+                    city.airPollution + ", nasłoczenie=" +
+                    city.insolation + ", a więc poziom życia jest " + EvaluateResults(city.decision) + ", gdyż wyniosł " + city.decision);
 
             }
             Console.ReadKey();
+        }
+
+        static string EvaluateResults(double val)
+        {
+            if (val < 0.3) return "zły";
+            if (val >= 0.3 && val <= 0.7) return "średni";
+            if (val > 0.9) return "idealna";
+            else return "ok";
         }
         static double triangle(double a, double b, double c, double x)
         {
